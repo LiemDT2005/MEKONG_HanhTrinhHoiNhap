@@ -1,0 +1,14 @@
+using Mekong.Api.Services;
+var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://127.0.0.1:5080");
+builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://127.0.0.1:5173", "http://localhost:5173", "http://127.0.0.1:4173").AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddHttpClient<AIAdvisorService>(client => client.Timeout = TimeSpan.FromSeconds(18));
+builder.Services.AddSingleton<PromptBuilder>();
+var app = builder.Build();
+app.UseCors();
+app.MapOpenApi();
+app.MapControllers();
+app.MapGet("/api/health", () => new { status = "ok", mode = string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("GEMINI_API_KEY")) ? "demo" : "gemini" });
+app.Run();

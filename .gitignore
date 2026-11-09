@@ -1,0 +1,15 @@
+node_modules/
+dist/
+backend/bin/
+backend/obj/
+.env
+.env.*
+!.env.example
+*.user
+test-results/
+*.tsbuildinfo
+tmp/
+output/
+__pycache__/
+*.pyc
+*.log

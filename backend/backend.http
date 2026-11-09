@@ -1,0 +1,10 @@
+@backend_HostAddress = http://127.0.0.1:5080
+
+GET {{backend_HostAddress}}/api/health
+Accept: application/json
+
+###
+POST {{backend_HostAddress}}/api/advisor/chat
+Content-Type: application/json
+
+{"question":"Giá trị thặng dư khác lợi nhuận thế nào?","state":{"quarter":1,"cash":700}}

@@ -6,6 +6,8 @@ Trò chơi giáo dục tiếng Việt: điều hành doanh nghiệp chế biến
 
 Hướng dẫn dành cho người chơi: [Tải cẩm nang PDF 5 trang](HUONG_DAN_CHOI_MEKONG.pdf).
 
+Triển khai online: [Hướng dẫn deploy frontend và backend trên Render](docs/DEPLOY_RENDER.md).
+
 ## Chạy trên máy
 
 Đã kiểm tra với Node.js 24, npm 11 và .NET SDK 9.0.308. Cài phụ thuộc lần đầu cần kết nối npm/NuGet.
@@ -44,7 +46,7 @@ dotnet run --project backend --no-launch-profile
 
 `GEMINI_MODEL` có thể đổi sang model được tài khoản hỗ trợ. Không đặt khóa trong `VITE_*`, mã frontend hoặc Git. Tích hợp dùng REST `generateContent` và header `x-goog-api-key` theo [tài liệu Google](https://ai.google.dev/api/generate-content). Timeout phía server là 18 giây, client là 22 giây. Thiếu khóa, lỗi mạng/model, phản hồi rỗng hoặc timeout sẽ chuyển về chế độ dự phòng.
 
-Nếu frontend và backend chạy ở hai origin khác nhau: sao chép `.env.example` thành `.env`, đặt `VITE_API_BASE_URL`, cập nhật danh sách CORS trong `backend/Program.cs`, và build lại. Backend mặc định chỉ lắng nghe loopback; để triển khai ra ngoài cần cấu hình máy chủ ASP.NET, HTTPS, reverse proxy, giới hạn truy cập/tần suất API và CORS phù hợp. Dự án này chưa được xuất bản lên Internet.
+Nếu frontend và backend chạy ở hai origin khác nhau: đặt `VITE_API_BASE_URL` khi build frontend và `FRONTEND_ORIGINS` ở môi trường backend. `FRONTEND_ORIGINS` nhận một hoặc nhiều origin phân cách bằng dấu phẩy. Backend đọc `PORT` để lắng nghe trên `0.0.0.0`; nếu không có `PORT`, dùng `ASPNETCORE_URLS` hoặc mặc định loopback 5080. Đã bổ sung Dockerfile cho Render; xem hướng dẫn triển khai ở trên. Chưa tạo dịch vụ hay xuất bản lên tài khoản Render trong quá trình chuẩn bị này.
 
 ## Kịch bản trình diễn 3–5 phút
 

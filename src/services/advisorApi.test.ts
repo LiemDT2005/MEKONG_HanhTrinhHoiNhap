@@ -1,8 +1,25 @@
 import { afterEach, describe, it, expect, vi } from "vitest";
 import { initialState } from "../data/gameConfig";
 import { askAdvisor } from "./advisorApi";
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
+});
 describe("advisor failure boundary", () => {
+  it("uses the configured production API origin without doubled slashes", async () => {
+    vi.stubEnv("VITE_API_BASE_URL", " https://mekong-api.example/// ");
+    const mock = vi
+      .fn()
+      .mockResolvedValue({
+        ok: true,
+        json: async () => ({ mode: "demo", message: "Nội dung giáo dục." }),
+      });
+    vi.stubGlobal("fetch", mock);
+    await askAdvisor(initialState("CEO"), "Chu chuyển");
+    expect(mock.mock.calls[0][0]).toBe(
+      "https://mekong-api.example/api/advisor/chat",
+    );
+  });
   it("keeps the game state intact when the API is unavailable", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
     const state = initialState("CEO"),
@@ -13,12 +30,10 @@ describe("advisor failure boundary", () => {
     expect(JSON.stringify(state)).toBe(before);
   });
   it("includes deterministic context and rejects invalid server responses", async () => {
-    const mock = vi
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        json: async () => ({ mode: "unknown", message: 10 }),
-      });
+    const mock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ mode: "unknown", message: 10 }),
+    });
     vi.stubGlobal("fetch", mock);
     const result = await askAdvisor(initialState("CEO"));
     const sent = JSON.parse(mock.mock.calls[0][1].body);
@@ -30,15 +45,13 @@ describe("advisor failure boundary", () => {
   it("labels an actual successful Gemini response as live", async () => {
     vi.stubGlobal(
       "fetch",
-      vi
-        .fn()
-        .mockResolvedValue({
-          ok: true,
-          json: async () => ({
-            mode: "gemini",
-            message: "Phân tích giáo dục.",
-          }),
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          mode: "gemini",
+          message: "Phân tích giáo dục.",
         }),
+      }),
     );
     expect(await askAdvisor(initialState("CEO"))).toEqual({
       mode: "gemini",

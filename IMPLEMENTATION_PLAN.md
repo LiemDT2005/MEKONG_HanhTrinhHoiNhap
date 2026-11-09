@@ -1,5 +1,17 @@
 # Mekong Business Simulator — implementation checklist
 
+## Render deployment preparation
+
+- [x] Add a multi-stage ASP.NET Dockerfile and exclude local/generated files from its context.
+- [x] Read Render PORT and bind to 0.0.0.0; preserve local development defaults.
+- [x] Configure CORS with FRONTEND_ORIGINS from the backend environment.
+- [x] Read and normalize VITE_API_BASE_URL using Vite's typed environment interface.
+- [x] Verify ASP.NET publish, production port binding, allowed/denied CORS origins and fallback response.
+- [x] Verify frontend build, production API-origin injection and all 18 automated tests.
+- [x] Write docs/DEPLOY_RENDER.md with exact Render settings, rewrite, environment setup and troubleshooting.
+
+Deployment itself is performed in the user's Render Dashboard. Docker Desktop was not running locally, so container-image build/runtime is not yet verified; the published .NET app and its environment configuration were verified directly.
+
 ## Direction A — playable 2.5D business world
 
 - [x] Replace the dashboard with an interactive Mekong business map.

@@ -29,9 +29,9 @@ export async function askAdvisor(
   state: GameState,
   question?: string,
 ): Promise<AdvisorReply> {
-  const base =
-    (import.meta as unknown as { env: Record<string, string> }).env
-      .VITE_API_BASE_URL || "";
+  const base = (import.meta.env.VITE_API_BASE_URL || "")
+    .trim()
+    .replace(/\/+$/, "");
   let projection;
   try {
     projection = preview(state);

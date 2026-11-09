@@ -5,11 +5,13 @@ export function GameDialog({
   children,
   onClose,
   wide = false,
+  className = "",
 }: {
   title: string;
   children: ReactNode;
   onClose: () => void;
   wide?: boolean;
+  className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null),
     close = useRef(onClose);
@@ -55,7 +57,7 @@ export function GameDialog({
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`modal game-dialog ${wide ? "wide" : ""}`}
+        className={`modal game-dialog ${wide ? "wide" : ""} ${className}`}
       >
         <button className="close" autoFocus aria-label="Đóng" onClick={onClose}>
           <X size={19} />

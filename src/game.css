@@ -2561,7 +2561,7 @@
   }
 }
 .chapter-mission {
-  margin: 0 0 18px;
+  margin: 0 0 12px;
 }
 .game-dialog.wide {
   width: min(960px, 96vw);
@@ -2571,25 +2571,134 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  padding: 20px 24px;
-  background: #f7f1df;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f8f5e9;
   border: 1px solid #d4d9bd;
-  border-left: 5px solid #477b60;
-  border-radius: 16px;
+  border-radius: 12px;
+}
+.chapter-number {
+  display: grid;
+  place-content: center;
+  flex: 0 0 36px;
+  height: 38px;
+  text-align: center;
+  border-radius: 8px;
+  background: #e7eddd;
+  color: #315f50;
+}
+.chapter-number strong {
+  font-size: 16px;
+  line-height: 18px;
+}
+.chapter-number small {
+  font-size: 9px;
+  line-height: 12px;
+  color: #73816b;
+}
+.chapter-banner-copy {
+  flex: 1;
+  min-width: 0;
 }
 .chapter-banner h2 {
-  margin: 7px 0;
-  font-size: clamp(18px, 2vw, 25px);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.35;
   color: #254f42;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .chapter-banner p {
-  margin: 0;
+  margin: 3px 0 0;
   color: #526b5d;
-  font-size: 13px;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.chapter-banner button {
+.chapter-banner .chapter-action {
   flex-shrink: 0;
+  min-height: 34px;
+  padding: 8px 12px;
+  font-size: 11px;
+  border-radius: 8px;
+}
+.chapter-journals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.chapter-journals:empty {
+  display: none;
+}
+.chapter-journals .chapter-journal {
+  margin-top: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  max-width: 100%;
+}
+.chapter-journals .chapter-journal[open] {
+  flex: 1 0 100%;
+}
+.chapter-journals summary {
+  font-size: 11px;
+}
+.game-dialog.chapter-scenario {
+  width: min(860px, calc(100vw - 32px));
+  max-height: 78vh;
+  max-height: 78svh;
+  padding: 20px 22px;
+}
+.chapter-scenario > h2 {
+  font-size: 20px;
+  margin: 3px 0 14px;
+}
+.chapter-scenario-intro {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.chapter-scenario-intro .chapter-art {
+  flex: 0 0 160px;
+  width: 160px;
+  height: 82px;
+  min-height: 0;
+  margin: 0;
+  background: #d5eddf;
+  border-radius: 9px;
+}
+.chapter-scenario-intro .character-dialogue {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.chapter-scenario .chapter-objective {
+  margin: 12px 0;
+  font-size: 12px;
+}
+.chapter-scenario .chapter-choices {
+  gap: 10px;
+  margin: 12px 0;
+}
+.chapter-scenario .chapter-choices article {
+  padding: 12px;
+}
+.chapter-scenario .chapter-choices h3 {
+  font-size: 14px;
+}
+.chapter-scenario .chapter-choices p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.chapter-scenario .chapter-choices button {
+  font-size: 12px;
+  padding: 10px 8px;
 }
 .chapter-art {
   display: block;
@@ -2693,9 +2802,23 @@
 }
 @media (max-width: 700px) {
   .chapter-banner {
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 16px;
+    gap: 8px;
+    padding: 9px 10px;
+  }
+  .chapter-banner h2 {
+    font-size: 13px;
+  }
+  .chapter-banner .chapter-action {
+    padding: 8px;
+    max-width: 110px;
+  }
+  .game-dialog.chapter-scenario {
+    padding: 20px 16px 16px;
+  }
+  .chapter-scenario-intro .chapter-art {
+    flex-basis: 96px;
+    width: 96px;
+    height: 64px;
   }
   .chapter-choices {
     grid-template-columns: 1fr;
@@ -2703,5 +2826,14 @@
   .chapter-art {
     min-height: 95px;
     object-fit: cover;
+  }
+}
+@media (max-width: 460px) {
+  .chapter-banner p {
+    display: none;
+  }
+  .chapter-number {
+    flex-basis: 30px;
+    height: 34px;
   }
 }

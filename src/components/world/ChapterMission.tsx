@@ -133,11 +133,15 @@ export function ChapterMission({ active = true }: { active?: boolean }) {
   return (
     <section className="chapter-mission">
       <div className="chapter-banner">
-        <div>
-          <span className="world-eyebrow">
-            CHƯƠNG {Math.min(4, game.quarter)} / 4 · CHIẾN LƯỢC KINH TẾ
-          </span>
-          <h2>{chapter.title}</h2>
+        <span
+          className="chapter-number"
+          aria-label={`Chương ${Math.min(4, game.quarter)} trên 4`}
+        >
+          <strong>{String(Math.min(4, game.quarter)).padStart(2, "0")}</strong>
+          <small>/ 04</small>
+        </span>
+        <div className="chapter-banner-copy">
+          <h2 title={chapter.title}>{chapter.title}</h2>
           <p>
             {done
               ? "Hành trình hoàn tất. Xem lại bài học và năng lực cạnh tranh."
@@ -145,46 +149,54 @@ export function ChapterMission({ active = true }: { active?: boolean }) {
           </p>
         </div>
         {!done && (
-          <button className="game-secondary" onClick={() => setOpen(true)}>
-            {decision ? "Xem quyết định" : "Nhận nhiệm vụ"}
+          <button
+            className="game-secondary chapter-action"
+            onClick={() => setOpen(true)}
+          >
+            {decision ? "Đã chọn · Xem lại" : "Nhiệm vụ"}
           </button>
         )}
       </div>
-      {game.history.at(-1) && (
-        <details className="chapter-journal">
-          <summary>
-            Báo cáo chương {game.history.at(-1)!.quarter} ·{" "}
-            {chapterAchieved(game.history.at(-1)!)
-              ? "Đạt thành tựu"
-              : "Bài học cần cải thiện"}
-          </summary>
-          <ChapterReport game={game} result={game.history.at(-1)!} />
-        </details>
-      )}
-      {(decision || game.purchases.length > 0 || game.history.length > 0) && (
-        <details
-          className="chapter-journal"
-          onToggle={(e) => setAdvisorOpen(e.currentTarget.open)}
-        >
-          <summary>Đối thoại với cố vấn kinh tế</summary>
-          {advisorOpen && <DecisionAdvisor game={game} />}
-        </details>
-      )}
+      <div className="chapter-journals">
+        {game.history.at(-1) && (
+          <details className="chapter-journal">
+            <summary>
+              Báo cáo chương {game.history.at(-1)!.quarter} ·{" "}
+              {chapterAchieved(game.history.at(-1)!)
+                ? "Đạt thành tựu"
+                : "Bài học cần cải thiện"}
+            </summary>
+            <ChapterReport game={game} result={game.history.at(-1)!} />
+          </details>
+        )}
+        {(decision || game.purchases.length > 0 || game.history.length > 0) && (
+          <details
+            className="chapter-journal"
+            onToggle={(e) => setAdvisorOpen(e.currentTarget.open)}
+          >
+            <summary>Đối thoại với cố vấn kinh tế</summary>
+            {advisorOpen && <DecisionAdvisor game={game} />}
+          </details>
+        )}
+      </div>
       {show && (
         <GameDialog
           wide
+          className="chapter-scenario"
           title={chapter.title}
           onClose={() => {
             setDismissed(game.quarter);
             setOpen(false);
           }}
         >
-          <ChapterArt chapter={game.quarter} />
-          <p className="character-dialogue">
-            <strong>{chapter.speaker}</strong>
-            <br />“{chapter.dialogue}”
-          </p>
-          <p>
+          <div className="chapter-scenario-intro">
+            <ChapterArt chapter={game.quarter} />
+            <p className="character-dialogue">
+              <strong>{chapter.speaker}</strong>
+              <br />“{chapter.dialogue}”
+            </p>
+          </div>
+          <p className="chapter-objective">
             <strong>Nhiệm vụ:</strong> {chapter.objective}
           </p>
           <div className="chapter-choices">

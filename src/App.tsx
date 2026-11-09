@@ -56,6 +56,10 @@ import { money } from "./utils/currency";
 import { Landscape } from "./components/Landscape";
 import { FinanceChart, ComparisonChart } from "./components/DeferredCharts";
 import { Advisor } from "./components/Advisor";
+import {
+  DecisionFeedback,
+  EducationalReport,
+} from "./components/world/ChapterMission";
 import { GameWorld, ResourceHud } from "./components/world/GameWorld";
 const nav = [
   { path: "", label: "Khu doanh nghiệp", icon: MapPin },
@@ -183,7 +187,7 @@ function Welcome() {
           </p>
           <p className="welcome-description">
             Trở thành giám đốc một doanh nghiệp lúa gạo tại Cần Thơ. Đầu tư,
-            điều hành và khám phá sức mạnh của tích lũy tư bản qua 4 quý kinh
+            điều hành và khám phá sức mạnh của tích lũy tư bản qua 4 chương kinh
             doanh.
           </p>
           <div className="welcome-facts">
@@ -191,7 +195,7 @@ function Welcome() {
               <Timer size={17} /> 3–5 phút trải nghiệm
             </span>
             <span>
-              <Target size={17} /> 4 quý để bứt phá
+              <Target size={17} /> 4 chương để trưởng thành
             </span>
           </div>
           <form
@@ -280,7 +284,7 @@ function Welcome() {
       </footer>
       {help && (
         <Modal
-          title="4 quý. Những quyết định của bạn."
+          title="4 chương. Những quyết định của bạn."
           onClose={() => setHelp(false)}
         >
           <ol className="help-list">
@@ -288,7 +292,7 @@ function Welcome() {
             <li>Đầu tư có chọn lọc; giữ vốn cho nguyên liệu và lương.</li>
             <li>Chọn thị trường phù hợp chất lượng và truy xuất.</li>
             <li>Xem dự toán, xác nhận sản xuất, đọc kết quả và cố vấn.</li>
-            <li>Sau 4 quý, xem điểm và so sánh hai chiến lược.</li>
+            <li>Sau 4 chương, xem bài học và năng lực cạnh tranh.</li>
           </ol>
           <p className="notice">
             Mọi tham số là giả định giáo dục. Lợi nhuận kế toán và giá trị thặng
@@ -336,6 +340,7 @@ function Shell() {
   const q = Math.min(game.quarter, 4);
   return (
     <div className="app-shell strategy-shell">
+      <DecisionFeedback />
       <aside
         className={`sidebar ${mobile ? "open" : ""}`}
         inert={narrow && !mobile}
@@ -416,7 +421,7 @@ function Shell() {
           <div className="topbar-right">
             <span className="quarter-badge">
               <span className="status-dot" />
-              {game.quarter > 4 ? "Hoàn thành" : "Quý " + q + " / 4"}
+              {game.quarter > 4 ? "Hoàn thành" : "Chương " + q + " / 4"}
             </span>
             <button
               className="icon-button restart"
@@ -833,7 +838,7 @@ function ProductionPage() {
       {game.quarter > 4 ? (
         <div className="panel empty-state">
           <Award size={45} />
-          <h2>Đã hoàn thành 4 quý kinh doanh</h2>
+          <h2>Đã hoàn thành 4 chương kinh tế</h2>
           <NavLink className="primary" to="/game/report">
             Khám phá thành tích <ArrowRight size={16} />
           </NavLink>
@@ -906,7 +911,7 @@ function ProductionPage() {
                     className="game-primary full"
                     onClick={() => navigate("/game?operate=1")}
                   >
-                    <Play size={17} /> Vận hành quý này
+                    <Play size={17} /> Hoàn tất chương
                   </button>
                 </>
               ) : (
@@ -1067,6 +1072,7 @@ function ReportPage() {
       </div>
       {tab === "own" ? (
         <>
+          <EducationalReport game={game} />
           <div className="report-score panel">
             <div className="score-circle">
               <strong>{sc.total}</strong>
@@ -1075,12 +1081,12 @@ function ReportPage() {
             <div>
               <span className="eyebrow">
                 {game.quarter > 4
-                  ? "THÀNH TÍCH CUỐI HÀNH TRÌNH"
-                  : "ĐÁNH GIÁ TẠM THỜI"}
+                  ? "ĐIỂM THAM KHẢO · KHÔNG QUYẾT ĐỊNH CHIẾN THẮNG"
+                  : "ĐIỂM THAM KHẢO"}
               </span>
               <h2>{sc.grade}</h2>
               <p>
-                {game.companyName} · Hoàn thành {game.history.length}/4 quý ·{" "}
+                {game.companyName} · Hoàn thành {game.history.length}/4 chương ·{" "}
                 {game.upgrades.length}/6 nâng cấp
               </p>
               <div className="achievement-row">

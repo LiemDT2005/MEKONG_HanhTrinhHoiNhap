@@ -1,10 +1,10 @@
 # Mekong Business Simulator
 
-Trò chơi giáo dục tiếng Việt: điều hành doanh nghiệp chế biến và xuất khẩu gạo tại Cần Thơ qua bốn quý. Giao diện React/Vite; bộ máy tính toán TypeScript độc lập; API ASP.NET Core gọi Gemini từ máy chủ.
+Trò chơi giáo dục tiếng Việt: điều hành doanh nghiệp chế biến và xuất khẩu gạo tại Cần Thơ qua bốn chương kinh tế; mỗi chương vận hành một kỳ kế toán 90 ngày. Giao diện React/Vite; bộ máy tính toán TypeScript độc lập; API ASP.NET Core gọi Gemini từ máy chủ.
 
 **Toàn bộ số liệu là giả định phục vụ học tập. Giá, chất lượng và điều kiện tiếp cận EU/RCEP trong game không phải thống kê hay quy định thực tế. Lợi nhuận kế toán không đồng nhất với giá trị thặng dư.**
 
-Hướng dẫn dành cho người chơi: [Tải cẩm nang PDF 5 trang](HUONG_DAN_CHOI_MEKONG.pdf).
+Hướng dẫn hiện tại: [Bốn chương và điều kiện chiến thắng](docs/PLAYER_GUIDE.md). Cẩm nang PDF trong kho là tài liệu của phiên bản bốn quý trước khi thiết kế lại.
 
 Triển khai online: [Hướng dẫn deploy frontend và backend trên Render](docs/DEPLOY_RENDER.md).
 
@@ -62,14 +62,16 @@ Giao diện chính đã chuyển sang **bản đồ doanh nghiệp 2.5D**. Thanh
 
 Nhấn công trình để mở bảng thao tác, chọn nâng cấp, xem dự toán rồi xác nhận. Các nâng cấp xuất hiện trực tiếp trên bản đồ: thiết bị sấy, khu chế biến bổ sung, cờ/nhân sự, hệ thống truy xuất, cần cẩu cảng và điểm liên kết HTX.
 
-Đọc thẻ sự kiện ở nhật ký, cân đối đầu tư, chọn thị trường và nhấn **Vận hành quý này**. Màn hình xác nhận hiển thị số tấn, doanh thu, lợi nhuận, tiền cuối quý và cảnh báo vốn. Sau xác nhận có hoạt ảnh ngắn và bảng kết quả mùa gặt; có thể bỏ qua hoạt ảnh. Trang dự toán chi tiết cũng dùng chung luồng này. Số liệu được ghi nhận một lần ngay khi xác nhận, nên tải lại trong hoạt ảnh vẫn giữ đúng quý đã chốt. Các mục tiêu trong nhật ký chỉ là gợi ý, không khóa cách chơi và không cộng điểm ngoài quy tắc engine.
+Mỗi chương bắt đầu bằng tranh minh họa và hội thoại, đưa ra ba chiến lược có chi phí, đánh đổi, rủi ro và dự toán được tính bằng engine. Chọn một chiến lược trước khi vận hành; vẫn có thể đầu tư tại công trình hoặc đổi thị trường. Cố vấn phản biện xuất hiện sau quyết định lớn. Dự toán lúc chọn được lưu riêng với kết quả thực thi cuối chương.
 
-1. Nhập tên, tạo công ty. Giới thiệu vốn ban đầu 1.000 triệu = 700 tiền mặt + 300 nguyên giá thiết bị.
-2. Quý 1: chọn Trung tâm nhân sự để đào tạo, Văn phòng để mua truy xuất, Bến cảng để mở thị trường RCEP; xem cảnh báo vốn và vận hành.
-3. Quý 2: chọn Nhà máy mua máy sấy, máy tách màu; chất lượng đạt 80, chọn EU và vận hành. Quan sát công trình mới. Công suất tăng nhưng sản lượng có thể giảm vì chi đầu tư.
-4. Quý 3: chọn Bến cảng tối ưu logistics, Vùng nguyên liệu liên kết hợp tác xã; vận hành.
-5. Quý 4: xem tác động gián đoạn logistics, sản xuất và đọc báo cáo. Mở so sánh A/B, đổi chỉ tiêu tiền mặt/lợi nhuận/chu chuyển; nhấn mạnh không có quy tắc B luôn thắng.
-6. Mở Kiến thức Mác để phân biệt lợi nhuận với m, đầu tư với tích lũy từ giá trị thặng dư. Nút bắt đầu lại có xác nhận; tải lại trang giữ tiến trình hợp lệ.
+1. **Vòng luẩn quẩn của doanh nghiệp nhỏ:** giữ quy mô, đào tạo hoặc mua máy sấy; cân đối tích lũy và vốn lưu động.
+2. **Cuộc đua công nghệ:** tự động hóa, tay nghề/hợp tác xã hoặc truy xuất; giá nội địa giảm.
+3. **Điểm nghẽn logistics:** tối ưu tuyến, liên kết nguyên liệu hoặc giữ tiền; cảng bị gián đoạn.
+4. **Vươn ra thị trường quốc tế:** chọn RCEP, EU hoặc nội địa theo năng lực thực tế.
+
+Một đường thắng đã kiểm tra: đào tạo → truy xuất → logistics → đơn hàng RCEP. Không có chiến lược mặc định luôn tốt hơn: mua máy sớm có thể giảm sản lượng, EU có giá cao nhưng cần vốn và chi phí tuân thủ. Báo cáo cuối chương nêu vấn đề, quyết định, kết quả, lý luận và bài học. Báo cáo cuối hành trình kiểm tra năm điều kiện cạnh tranh thay vì chỉ cộng lợi nhuận. Xem [kế hoạch thiết kế lại](docs/GAMEPLAY_REDESIGN.md).
+
+Bản lưu cũ vẫn đọc được; lịch sử đã chốt giữ nguyên và được ghi rõ không có nhật ký lựa chọn. Chu kỳ tương lai theo thứ tự sự kiện mới. Điểm 100 của phiên bản cũ vẫn có trong phần tham khảo và so sánh; không quyết định chiến thắng.
 
 ## Quy tắc tài chính
 
@@ -81,16 +83,17 @@ Nhấn công trình để mở bảng thao tác, chọn nâng cấp, xem dự to
 - Tiền cuối quý = tiền đầu quý − toàn bộ đầu tư đã trả − chi biến đổi − lương − chi cố định + doanh thu. Không trừ khấu hao vào tiền mặt; không trừ lại khoản đầu tư đã trả.
 - Khấu hao giả định: 15 triệu/quý cho thiết bị ban đầu + 2,5% nguyên giá tài sản mua thêm/quý. `equipment` lưu nguyên giá, không phải giá trị còn lại. Trò chơi kéo dài bốn quý.
 - Máy sấy giảm chi phí chế biến 0,2 triệu/tấn để minh họa giảm hao hụt. Logistics giảm 0,4 triệu/tấn, hợp tác xã giảm nguyên liệu 0,5 triệu/tấn.
-- Sự kiện Q2 giảm giá nội địa 0,5 triệu/tấn; Q3 tăng trần nhu cầu xuất khẩu 5 tấn; Q4 tăng logistics 0,8 triệu/tấn và thời gian 15 ngày, hoặc 0,2 triệu/tấn và 5 ngày nếu đã tối ưu logistics. Hiệu ứng chỉ áp dụng ở quý tương ứng.
+- Sự kiện Q2 giảm giá nội địa 0,5 triệu/tấn; chương 4 tăng trần nhu cầu xuất khẩu 5 tấn; chương 3 tăng logistics 0,8 triệu/tấn và thời gian 15 ngày, hoặc 0,2 triệu/tấn và 5 ngày nếu đã tối ưu logistics. Hiệu ứng chỉ áp dụng ở quý tương ứng.
 - `n = 360 / turnoverDays` là chỉ báo lý luận, không nhân doanh thu/sản lượng. Không suy ra c/v hoặc m từ kết quả kế toán.
 
-Điểm tối đa 100: tài chính 30 (1 điểm/20 triệu lợi nhuận lũy kế, chặn 0–30); công nghệ 25 (máy sấy 10, tách màu 10, truy xuất 5); hội nhập 20 (đã bán EU 20, RCEP 12, nội địa 0); thanh khoản 15 (1 điểm/70 triệu tiền cuối kỳ, chặn 0–15); đào tạo 10. Các giá trị lẻ làm tròn xuống khi tính điểm. Xếp loại: 0–39 khó khăn, 40–59 đang phát triển, 60–79 cạnh tranh khá, 80–100 hội nhập thành công.
+Điểm tham khảo cũ (không quyết định thắng), tối đa 100: tài chính 30 (1 điểm/20 triệu lợi nhuận lũy kế, chặn 0–30); công nghệ 25 (máy sấy 10, tách màu 10, truy xuất 5); hội nhập 20 (đã bán EU 20, RCEP 12, nội địa 0); thanh khoản 15 (1 điểm/70 triệu tiền cuối kỳ, chặn 0–15); đào tạo 10. Các giá trị lẻ làm tròn xuống khi tính điểm. Xếp loại tham khảo: 0–39 khó khăn, 40–59 đang phát triển, 60–79 cạnh tranh khá, 80–100 hội nhập thành công.
 
 Kịch bản A không đầu tư và bán nội địa. B đầu tư đào tạo/truy xuất Q1, máy sấy/tách màu Q2, logistics/hợp tác xã Q3; chọn thị trường đủ điều kiện cao nhất. Hai kịch bản khởi đầu giống hệt và dùng cùng sự kiện. Mọi biểu đồ lấy kết quả từ engine.
 
 ## Mã nguồn
 
 - `src/data/gameConfig.ts`: cấu hình tài chính, đầu tư, thị trường và sự kiện.
+- `src/data/chapters.ts`, `src/engine/chapters.ts`, `src/components/world/ChapterMission.tsx`: tình huống, lựa chọn nguyên tử, mục tiêu, tranh, hội thoại, báo cáo và điều kiện thắng.
 - `src/engine/simulation.ts`: mua nâng cấp, xác thực thị trường, dự toán, chốt quý, điểm và kịch bản.
 - `src/store/`: Zustand/LocalStorage và kiểm tra cấu trúc bản lưu.
 - `src/components/`: biểu đồ Recharts, cảnh đồng bằng SVG gốc, cố vấn.

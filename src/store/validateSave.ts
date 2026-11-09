@@ -1,5 +1,6 @@
 import type { GameState } from "../types/game";
 import { markets, upgrades } from "../data/gameConfig";
+import { chapters } from "../data/chapters";
 export function isValidSave(value: unknown): value is GameState {
   if (!value || typeof value !== "object") return false;
   const s = value as GameState;
@@ -72,6 +73,31 @@ export function isValidSave(value: unknown): value is GameState {
     "turnoverFrequency",
     "equipment",
   ] as const;
+  if (
+    s.decisions !== undefined &&
+    (!Array.isArray(s.decisions) ||
+      new Set(s.decisions.map((d) => d?.chapter)).size !== s.decisions.length ||
+      s.decisions.some(
+        (d) =>
+          !d ||
+          !Number.isInteger(d.chapter) ||
+          d.chapter < 1 ||
+          d.chapter > Math.min(4, s.quarter) ||
+          !chapters[d.chapter - 1].choices.some((c) => c.id === d.choice) ||
+          ![d.cashBefore, d.cashAfter].every(
+            (n) => Number.isFinite(n) && n >= 0,
+          ) ||
+          !d.forecast ||
+          d.forecast.quarter !== d.chapter ||
+          !Object.hasOwn(markets, d.forecast.market) ||
+          !numericFields.every(
+            (k) =>
+              typeof d.forecast[k] === "number" &&
+              Number.isFinite(d.forecast[k]),
+          ),
+      ))
+  )
+    return false;
   return s.history.every(
     (r, i) =>
       r &&

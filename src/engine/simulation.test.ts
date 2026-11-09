@@ -91,7 +91,7 @@ describe("quarterly financial engine", () => {
   });
   it("applies quarterly events without cumulative duplication", () => {
     let s = initial();
-    s = advance(advance(advance(s)));
+    s = advance(advance(s));
     expect(preview(s)).toEqual(preview(s));
     expect(preview(s).turnoverDays).toBe(75);
     const upgraded = purchase(s, "logistics");

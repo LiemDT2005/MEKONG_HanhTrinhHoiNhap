@@ -48,3 +48,6 @@ Direction A verified with a full four-quarter map playthrough, six direct upgrad
 Live Gemini output is unverified because no API credential was supplied. Server integration is implemented; verified fallback mode keeps the complete game playable. No hosted deployment was performed.
 
 All monetary parameters are hypothetical and expressed in million VND. Accounting profit and theoretical surplus value remain separate. No live Gemini claim without credentials and a successful response.
+
+
+Chapter-based gameplay redesign: see [docs/GAMEPLAY_REDESIGN.md](docs/GAMEPLAY_REDESIGN.md).

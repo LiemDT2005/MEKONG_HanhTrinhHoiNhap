@@ -28,7 +28,7 @@ export function Advisor() {
     return () => {
       active.current++;
     };
-  }, [game.history.length]);
+  }, [game]);
   return (
     <div className="advisor-layout">
       <div className="panel advisor-main">

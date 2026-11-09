@@ -48,6 +48,12 @@ import type {
 import { money } from "../../utils/currency";
 import { BusinessMap, buildings, type BuildingId } from "./BusinessMap";
 import { GameDialog } from "./GameDialog";
+import {
+  ChapterMission,
+  ChapterReport,
+  DecisionAdvisor,
+} from "./ChapterMission";
+import { chapters } from "../../data/chapters";
 
 const icons: Record<UpgradeId, typeof Factory> = {
   dryer: Factory,
@@ -125,7 +131,7 @@ export function ResourceHud() {
 }
 
 export function GameWorld() {
-  const { game, buy, run } = useGame(),
+  const { game, buy, run, advicePending } = useGame(),
     navigate = useNavigate(),
     reduced = useReducedMotion();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -256,13 +262,22 @@ export function GameWorld() {
           <div className="season-badge">
             <span>{completed ? "HÀNH TRÌNH" : "LƯỢT KINH DOANH"}</span>
             <strong>
-              {completed ? "Hoàn thành" : `Quý ${quarter}`}
-              <small>{completed ? "4/4 quý" : " / 4"}</small>
+              {completed ? "Hoàn thành" : `Chương ${quarter}`}
+              <small>{completed ? "4/4 chương" : " / 4"}</small>
             </strong>
           </div>
         </div>
       </div>
-      <div className="turn-steps" aria-label="Các bước trong quý">
+      <ChapterMission
+        active={
+          phase === "idle" &&
+          !upgrade &&
+          !eventOpen &&
+          !guideOpen &&
+          !advicePending
+        }
+      />
+      <div className="turn-steps" aria-label="Các bước trong chương">
         <button
           className={eventSeen ? "done" : "active"}
           onClick={() => setEventOpen(true)}
@@ -270,7 +285,7 @@ export function GameWorld() {
           <span>{eventSeen ? <Check size={13} /> : "01"}</span>
           <div>
             <strong>Đón nhịp thị trường</strong>
-            <small>Sự kiện quý {quarter}</small>
+            <small>Tình huống chương {quarter}</small>
           </div>
           <ChevronRight size={15} />
         </button>
@@ -302,7 +317,7 @@ export function GameWorld() {
           <span>{completed ? <Check size={13} /> : "04"}</span>
           <div>
             <strong>
-              {completed ? "Nhìn lại hành trình" : "Vận hành quý này"}
+              {completed ? "Nhìn lại hành trình" : "Hoàn tất chương"}
             </strong>
             <small>
               {completed ? `${points.total}/100 điểm` : "Sản xuất & bán hàng"}
@@ -393,7 +408,7 @@ export function GameWorld() {
                 {completed
                   ? `Đã bán ${game.history.reduce((s, r) => s + r.quantity, 0)} tấn`
                   : `Dự toán ${estimate.result?.quantity ?? 0} / ${game.capacity} tấn`}
-                <small>{completed ? "qua 4 quý" : "trong quý này"}</small>
+                <small>{completed ? "qua 4 chương" : "trong quý này"}</small>
               </span>
             </div>
             <button
@@ -408,7 +423,7 @@ export function GameWorld() {
               ) : (
                 <Play size={17} fill="currentColor" />
               )}
-              {completed ? "Khám phá thành tích" : "Vận hành quý này"}
+              {completed ? "Khám phá thành tích" : "Hoàn tất chương"}
               <ArrowRight size={16} />
             </button>
           </div>
@@ -564,12 +579,12 @@ export function GameWorld() {
                     <span className="event-card-label">
                       {completed
                         ? "CHẶNG ĐƯỜNG VỪA QUA"
-                        : `SỰ KIỆN · QUÝ ${quarter}`}
+                        : `TÌNH HUỐNG · CHƯƠNG ${quarter}`}
                     </span>
                     <span className="event-card-symbol">
-                      {quarter === 4 ? (
+                      {quarter === 3 ? (
                         <Truck size={24} />
-                      ) : quarter === 3 ? (
+                      ) : quarter === 4 ? (
                         <Globe2 size={24} />
                       ) : quarter === 2 ? (
                         <Factory size={24} />
@@ -586,27 +601,20 @@ export function GameWorld() {
                 </button>
                 <div className="mission-checklist">
                   <span className="world-eyebrow">
-                    {completed
-                      ? "DẤU ẤN CỦA BẠN"
-                      : "MỤC TIÊU GỢI Ý · KHÔNG BẮT BUỘC"}
+                    {completed ? "DẤU ẤN CỦA BẠN" : "NHIỆM VỤ CHƯƠNG"}
                   </span>
                   {[
                     {
-                      done: game.upgrades.length > 0,
-                      title: "Gieo vốn cho tương lai",
-                      description: `${game.upgrades.length}/6 khoản đầu tư đã thực hiện`,
-                    },
-                    {
-                      done: game.quality >= 60,
-                      title: "Nâng tầm hạt gạo",
-                      description: `Chất lượng ${game.quality}/100 · mục tiêu 60`,
-                    },
-                    {
-                      done: game.history.some(
-                        (r) => r.market !== "domestic" && r.quantity > 0,
+                      done: !!game.decisions?.some(
+                        (d) => d.chapter === quarter,
                       ),
-                      title: "Vươn ra thị trường mới",
-                      description: "Hoàn thành một quý xuất khẩu",
+                      title: chapters[quarter - 1].title,
+                      description: chapters[quarter - 1].objective,
+                    },
+                    {
+                      done: !!game.history.find((r) => r.quarter === quarter),
+                      title: "Vận hành và phản biện",
+                      description: chapters[quarter - 1].question,
                     },
                   ].map((m) => (
                     <div
@@ -625,7 +633,7 @@ export function GameWorld() {
                   <div className="last-harvest">
                     <div>
                       <Wheat size={15} />
-                      <strong>Mùa gặt quý {last.quarter}</strong>
+                      <strong>Kết quả chương {last.quarter}</strong>
                     </div>
                     <span>
                       {last.quantity} tấn đã bán
@@ -728,16 +736,16 @@ export function GameWorld() {
         >
           <div className={`event-dialog-art event-quarter-${quarter}`}>
             <span>THÔNG ĐIỆP TỪ THỊ TRƯỜNG</span>
-            {quarter === 4 ? (
+            {quarter === 3 ? (
               <Truck size={65} strokeWidth={1.2} />
-            ) : quarter === 3 ? (
+            ) : quarter === 4 ? (
               <Globe2 size={65} strokeWidth={1.2} />
             ) : quarter === 2 ? (
               <Factory size={65} strokeWidth={1.2} />
             ) : (
               <Sprout size={65} strokeWidth={1.2} />
             )}
-            <span>QUÝ {quarter} / 4</span>
+            <span>CHƯƠNG {quarter} / 4</span>
           </div>
           <p>{event.description}</p>
           <div className="event-choice-note">
@@ -748,8 +756,8 @@ export function GameWorld() {
                 : quarter === 2
                   ? "Nâng cấp giúp tăng năng lực. Hãy kiểm tra lượng tiền còn lại cho sản xuất."
                   : quarter === 3
-                    ? "Chất lượng và truy xuất là điều kiện trong game để mở các tuyến xuất khẩu."
-                    : "Logistics đã nâng cấp sẽ giảm tác động gián đoạn. Kiểm tra chu kỳ và dự toán quý này."}
+                    ? "Tối ưu lưu thông giúp giảm cú sốc vận chuyển; không tự tạo doanh thu mới."
+                    : "Chọn thị trường phù hợp với chất lượng, truy xuất và vốn lưu động."}
             </p>
           </div>
           <button
@@ -772,8 +780,8 @@ export function GameWorld() {
           onClose={() => setGuideOpen(false)}
         >
           <p>
-            Bạn có 4 quý để phát triển doanh nghiệp. Hãy bắt đầu bằng một công
-            trình trên bản đồ.
+            Bạn có 4 chương để phát triển doanh nghiệp. Hãy bắt đầu bằng một
+            công trình trên bản đồ.
           </p>
           <div className="world-guide">
             {[
@@ -824,7 +832,7 @@ export function GameWorld() {
         <GameDialog
           title={
             estimate.result
-              ? `Chốt kế hoạch quý ${game.quarter}?`
+              ? `Chốt kế hoạch chương ${game.quarter}?`
               : "Cần cân đối lại nguồn vốn"
           }
           onClose={() => setPhase("idle")}
@@ -915,7 +923,7 @@ export function GameWorld() {
           className="quarter-running"
           role="dialog"
           aria-modal="true"
-          aria-label={`Đang vận hành quý ${result.quarter}`}
+          aria-label={`Đang vận hành chương ${result.quarter}`}
           onKeyDown={(e) => {
             if (e.key === "Escape") setPhase("result");
             if (e.key === "Tab") e.preventDefault();
@@ -923,7 +931,7 @@ export function GameWorld() {
         >
           <div className="running-scene" inert aria-hidden="true">
             <BusinessMap
-              game={game}
+              game={{ ...game, quarter: result.quarter }}
               selected={null}
               onSelect={() => {}}
               running
@@ -932,7 +940,7 @@ export function GameWorld() {
           </div>
           <div className="running-caption">
             <span className="world-eyebrow">
-              QUÝ {result.quarter} · {markets[result.market].name}
+              CHƯƠNG {result.quarter} · {markets[result.market].name}
             </span>
             <h2>Mùa gặt đang về.</h2>
             <p>Nhà máy chế biến · Vận chuyển · Giao hàng</p>
@@ -950,13 +958,15 @@ export function GameWorld() {
           title={
             result.profit >= 0
               ? "Một mùa gặt, một bước tiến."
-              : "Một quý đầu tư, một bài học."
+              : "Một lựa chọn, một bài học."
           }
           onClose={finishResult}
         >
+          <ChapterReport game={game} result={result} />
+          <DecisionAdvisor game={game} />
           <div className="harvest-medal">
             <Wheat size={37} />
-            <span>QUÝ {result.quarter} HOÀN TẤT</span>
+            <span>CHƯƠNG {result.quarter} HOÀN TẤT</span>
           </div>
           <div className="harvest-results">
             <div>
@@ -1023,7 +1033,7 @@ export function GameWorld() {
           >
             {completed
               ? "Khám phá thành tích"
-              : `Bước sang quý ${game.quarter}`}
+              : `Bước sang chương ${game.quarter}`}
             <ArrowRight size={17} />
           </button>
           <button

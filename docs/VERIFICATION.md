@@ -1,5 +1,25 @@
 # Verification record
 
+## Chapter redesign — 9 November 2026
+
+These checks supersede the older four-quarter gameplay descriptions below.
+
+- Baseline: all 18 existing tests and frontend production build passed before changes.
+- After chapter events and strategy integration: the existing 18 tests and production build passed; the logistics regression test was moved from period four to period three to match the new story order.
+- Final coverage: 31 tests in 5 files, including all existing financial/API/save checks, chapter decisions, insufficient working capital, duplicate decisions, export eligibility, all reachable choice paths, deterministic cash reconciliation, balanced winning/non-winning strategies, and save recovery.
+- Store integration checks verify that missions cannot be skipped, a double operation cannot skip a chapter, decisions survive persistence, old saves retain their history, and investment/market changes trigger advisor feedback.
+- React server-render checks cover the existing interactive map, illustrated scenario, disruption versus upgraded logistics, and durable educational/final reports. These are rendering smoke checks, not browser interaction or visual layout approval.
+- Frontend TypeScript/Vite build passed. Vite reports a main bundle above its 500 kB warning threshold; chart code remains split as before.
+- Backend build passed with 0 warnings/errors using an isolated output directory. The normal output executable was locked by an already-running backend; that process was left running. Restart the backend to load the revised advisor prompt.
+- Live browser verification could not be completed: the in-app browser timed out reaching the local dev server; Windows automation stopped because it could not confidently determine the browser URL. No visual screenshots or end-to-end click-through are claimed for this redesign.
+- Live Gemini output was not verified. Mocked API success/failure and deterministic educational fallback were checked; advice cannot mutate simulation state.
+
+The new final outcome requires net asset growth/liquidity, productive technology, labor development, faster turnover, and a profitable final export sale. The legacy 100-point score is explicitly secondary. An expensive prepared EU strategy can make export sales while failing the overall win condition; a lower-cost training/traceability/logistics/RCEP strategy can win.
+
+Official agreement references were checked against European Commission EVFTA texts and New Zealand MFAT RCEP text/resources. Game thresholds remain hypothetical and do not claim legal eligibility.
+
+## Earlier version verification
+
 Local checks on 9 November 2026:
 
 - `npm run build`: passed, TypeScript and Vite production output.

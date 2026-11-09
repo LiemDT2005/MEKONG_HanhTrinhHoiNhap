@@ -34,7 +34,7 @@ public sealed class AIAdvisorService(HttpClient http, PromptBuilder prompts, ILo
         var text = q.Contains("thặng dư") || q.Contains("c/v")
             ? "Ví dụ lý luận giả định: c = 600, v = 200, m = 100 triệu đồng; c/v = 3 và m′ = 50%. Không lấy lợi nhuận kế toán trong game làm giá trị thặng dư, cũng không lấy giá máy chia lương quý để thay cấu tạo hữu cơ tư bản."
             : q.Contains("logistics") || q.Contains("chu chuyển")
-            ? "Chu chuyển được minh họa bằng n = 360 / số ngày. Đầu tư logistics giảm chi phí và thời gian lưu thông, đồng thời giảm tác động của sự kiện quý 4. Trong MVP, số vòng là chỉ báo lý luận; không được nhân thẳng vào doanh thu."
+            ? "Chu chuyển được minh họa bằng n = 360 / số ngày. Đầu tư logistics giảm chi phí và thời gian lưu thông, đồng thời giảm tác động của sự kiện chương 3. Trong MVP, số vòng là chỉ báo lý luận; không được nhân thẳng vào doanh thu."
             : "Hãy xem sản lượng thực tế và cảnh báo vốn lưu động trong dự toán trước khi đầu tư. Máy móc nâng năng lực nhưng có thể làm giảm tiền dành cho nguyên liệu. Đào tạo, truy xuất và chất lượng hỗ trợ tiếp cận thị trường. Tái sản xuất mở rộng cần cân đối đầu tư với khả năng vận hành; lợi nhuận kế toán không tự động bằng giá trị thặng dư.";
         return new(text + "\n\nGiải thích giáo dục có sẵn — chế độ dự phòng, không phải phản hồi AI trực tiếp. Mọi số liệu và điều kiện thị trường trong trò chơi đều giả định.", "demo");
     }

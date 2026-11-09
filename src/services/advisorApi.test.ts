@@ -6,14 +6,31 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 describe("advisor failure boundary", () => {
+  it("keeps all four educational sections when the server uses demo mode", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ mode: "demo", message: "Generic old fallback" }),
+      }),
+    );
+    const result = await askAdvisor(initialState("CEO"));
+    for (const heading of [
+      "Hệ quả tài chính và vận hành:",
+      "Liên hệ lý luận:",
+      "Câu hỏi phản biện:",
+      "Gợi ý thực hành:",
+    ])
+      expect(result.message).toContain(heading);
+    expect(result.message).toContain("35/40 tấn");
+    expect(result.mode).toBe("demo");
+  });
   it("uses the configured production API origin without doubled slashes", async () => {
     vi.stubEnv("VITE_API_BASE_URL", " https://mekong-api.example/// ");
-    const mock = vi
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        json: async () => ({ mode: "demo", message: "Nội dung giáo dục." }),
-      });
+    const mock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ mode: "demo", message: "Nội dung giáo dục." }),
+    });
     vi.stubGlobal("fetch", mock);
     await askAdvisor(initialState("CEO"), "Chu chuyển");
     expect(mock.mock.calls[0][0]).toBe(

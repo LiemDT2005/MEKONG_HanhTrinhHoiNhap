@@ -30,6 +30,7 @@ export const initialState = (
   capacity: config.capacity,
   quality: config.quality,
   turnoverDays: config.turnoverDays,
+  decisions: [],
   upgrades: [],
   purchases: [],
   market: "domestic",
@@ -139,7 +140,7 @@ export const markets: Record<
 };
 export const events = [
   {
-    name: "Khởi đầu trên dòng Mekong",
+    name: "Vòng luẩn quẩn của doanh nghiệp nhỏ",
     description:
       "Doanh nghiệp bước vào thị trường nội địa. Cân đối vốn lưu động trước khi mở rộng sản xuất.",
     priceDelta: 0,
@@ -161,18 +162,7 @@ export const events = [
     mitigatedDelay: 0,
   },
   {
-    name: "Cánh cửa hội nhập",
-    description:
-      "Nhu cầu xuất khẩu tăng thêm 5 tấn trong quý này. Chất lượng và truy xuất là chìa khóa tiếp cận.",
-    priceDelta: 0,
-    logisticsDelta: 0,
-    delay: 0,
-    exportDemandBonus: 5,
-    mitigatedLogisticsDelta: 0,
-    mitigatedDelay: 0,
-  },
-  {
-    name: "Thách thức logistics",
+    name: "Điểm nghẽn logistics",
     description:
       "Vận chuyển tăng 0,8 triệu/tấn và chu kỳ tăng 15 ngày; nâng cấp logistics giảm tác động còn 0,2 triệu/tấn và 5 ngày.",
     priceDelta: 0,
@@ -181,5 +171,16 @@ export const events = [
     exportDemandBonus: 0,
     mitigatedLogisticsDelta: 0.2,
     mitigatedDelay: 5,
+  },
+  {
+    name: "Vươn ra thị trường quốc tế",
+    description:
+      "Nhu cầu xuất khẩu tăng thêm 5 tấn trong quý này. Chất lượng và truy xuất là chìa khóa tiếp cận.",
+    priceDelta: 0,
+    logisticsDelta: 0,
+    delay: 0,
+    exportDemandBonus: 5,
+    mitigatedLogisticsDelta: 0,
+    mitigatedDelay: 0,
   },
 ];

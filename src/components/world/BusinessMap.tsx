@@ -717,6 +717,46 @@ export function BusinessMap({
           10°02′ N · 105°47′ E
         </text>
       </g>
+      <g transform="translate(56 35)" pointerEvents="none">
+        <rect
+          width="440"
+          height="62"
+          rx="12"
+          fill="#faf3dc"
+          stroke={quarter === 3 && !has("logistics") ? "#b97d49" : "#91ab84"}
+        />
+        <text x="16" y="25" fill="#315f50" fontSize="15" fontWeight="700">
+          {quarter === 1
+            ? "VỐN NHỎ · CÂN ĐỐI TRƯỚC KHI MỞ RỘNG"
+            : quarter === 2
+              ? "GIÁ NỘI ĐỊA GIẢM · CUỘC ĐUA NĂNG SUẤT"
+              : quarter === 3
+                ? has("logistics")
+                  ? "LUỒNG HÀNG ĐƯỢC ĐIỀU PHỐI"
+                  : "ÙN TẮC CẢNG · VỐN QUAY VỀ CHẬM"
+                : game.market === "domestic"
+                  ? "CỦNG CỐ NỘI LỰC · CHUẨN BỊ HỘI NHẬP"
+                  : "ĐƠN HÀNG QUỐC TẾ · CHUẨN BỊ XUẤT BẾN"}
+        </text>
+        <text x="16" y="46" fill="#5c725b" fontSize="12">
+          {quarter === 3
+            ? has("logistics")
+              ? "Gián đoạn: +5 ngày · phí +0,2 triệu/tấn"
+              : "Gián đoạn: +15 ngày · phí +0,8 triệu/tấn"
+            : `${game.upgrades.length} nâng cấp · ${game.quality}/100 chất lượng · ${game.turnoverDays} ngày chu kỳ nền`}
+        </text>
+      </g>
+      {quarter === 3 && !has("logistics") && (
+        <g pointerEvents="none" transform="translate(740 473)">
+          <path d="M0 0 H90 V18 H0Z" fill="#f0ca73" stroke="#9e6d46" />
+          <path
+            d="M10 0 L28 18 M38 0 L56 18 M66 0 L84 18"
+            stroke="#9e6d46"
+            strokeWidth="8"
+          />
+          <path d="M10 18 V35 M80 18 V35" stroke="#7c6649" strokeWidth="5" />
+        </g>
+      )}
       <text
         x="1008"
         y="434"

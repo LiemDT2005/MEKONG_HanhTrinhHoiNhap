@@ -36,6 +36,7 @@ export interface QuarterResult {
   warnings: string[];
 }
 export interface GameState {
+  decisions?: ChapterDecision[];
   playerName: string;
   companyName: string;
   quarter: number;
@@ -50,6 +51,13 @@ export interface GameState {
   history: QuarterResult[];
   started: boolean;
   failed: boolean;
+}
+export interface ChapterDecision {
+  chapter: number;
+  choice: string;
+  cashBefore: number;
+  cashAfter: number;
+  forecast: QuarterResult;
 }
 export interface Upgrade {
   id: UpgradeId;
